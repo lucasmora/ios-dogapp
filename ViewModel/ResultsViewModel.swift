@@ -8,13 +8,12 @@
 import Foundation
 import SwiftUI
 
-struct Result {
-    let name: String
-    let picture: UIImage
-}
-
 class ResultsViewModel: ObservableObject {
     @Published var results = [(String, UIImage)]()
+    
+    func getResults() -> [(String, UIImage)] {
+        return self.results
+    }
     
     func clearResults() {
         DispatchQueue.main.async {

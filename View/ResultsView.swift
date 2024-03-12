@@ -16,10 +16,17 @@ struct ResultsView: View {
             GridItem(.flexible())
         ]
         
-        if !resultsViewModel.results.isEmpty {
+        let results: [Result] = resultsViewModel.getResults().map { tuple in
+            Result(name: tuple.0, picture: tuple.1)
+        }
+        
+        if !results.isEmpty {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 10) {
-                    createGridItem(name: $resultsViewModel.results[0].0.wrappedValue, picture: $resultsViewModel.results[0].1.wrappedValue) }
+                    ForEach(results, id: \.self) { result in
+                        createGridItem(name: result.name, picture: result.picture)
+                    }
+                }
             }
         } else {
             Text("Loading...")
