@@ -9,36 +9,35 @@ import Foundation
 import SwiftUI
 
 class SearchDogsViewModel {    
-    func getNamesAndPictures(_ dogs: Dogs) -> [(String, UIImage)] {
+    func getNamesAndPictures(_ dogs: Dogs, completion: @escaping ([(String, UIImage)]) -> Void) {
         var names: [String] = []
         var picsUrls: [String] = []
         var pictures: [UIImage] = []
+        var namesAndPictures = [(String, UIImage)]()
         
         dogs.forEach { dog in
-            names.append(dog.name)
-            picsUrls.append(dog.imageLink)
-        }
-        
-        picsUrls.forEach { urlString in
-            let url = URL(string: urlString)!
+            let url = URL(string: dog.imageLink)!
+            var picture = UIImage(systemName: "heart.fill")
             
             var request = URLRequest(url: url)
             request.setValue("1ErqLZKNVaGqp5RB3FDmDg==YvopevCM37CeLoLu", forHTTPHeaderField: "X-Api-Key")
             let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
                 guard let data = data else { return }
                 
-                let imagem = UIImage(data: data)
-                pictures.append(imagem!)
+                if let imagem = UIImage(data: data) {
+                    picture = imagem
+                }
+                
+                namesAndPictures.append((dog.name, picture!))
+                
+                if namesAndPictures.count == dogs.count {
+                    DispatchQueue.main.async {
+                        completion(namesAndPictures)
+                    }
+                }
             }
             task.resume()
         }
-        
-        var namesAndPictures = [(String, UIImage)]()
-        for i in 0..<dogs.count {
-            let dog = (dogs[i].name, pictures[i])
-            namesAndPictures.append(dog)
-        }
-        return namesAndPictures
     }
     
     func search(params: [Double], completion: @escaping (Dogs?) -> Void) {

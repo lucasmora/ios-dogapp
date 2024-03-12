@@ -8,34 +8,40 @@
 import SwiftUI
 
 struct ResultsView: View {
-    @State private var isSecondViewPresented = false
+    @ObservedObject var resultsViewModel: ResultsViewModel
     
     var body: some View {
-        let layout = [
+        let columns = [
             GridItem(.flexible()),
             GridItem(.flexible())
         ]
         
-        LazyVGrid(columns: layout, content: {
-            createGridItem(picture: "heart.fill", name: "Golden Retriever")
-            createGridItem(picture: "heart.fill", name: "Border Collie")
-        })
+        if !resultsViewModel.results.isEmpty {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 10) {
+                    createGridItem(name: $resultsViewModel.results[0].0.wrappedValue, picture: $resultsViewModel.results[0].1.wrappedValue) }
+            }
+        } else {
+            Text("Loading...")
+        }
     }
     
-    public func createGridItem(picture: String, name: String) -> some View {
+    public func createGridItem(name: String, picture: UIImage) -> some View {
         return VStack {
-            Image(systemName: picture)
-                .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            Image(uiImage: picture)
+                .resizable()
                 .aspectRatio(contentMode: .fill)
+                .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
+                .clipped()
             
             Divider()
             Text(name)
         }
     }
-}
-
-struct ResultsView_Previews: PreviewProvider {
-    static var previews: some View {
-        ResultsView()
+    
+    struct ResultsView_Previews: PreviewProvider {
+        static var previews: some View {
+            ResultsView(resultsViewModel: ResultsViewModel())
+        }
     }
 }

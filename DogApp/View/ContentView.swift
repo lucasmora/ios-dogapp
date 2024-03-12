@@ -8,19 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var barkingValue: Double = 2.0
-    @State private var energyValue: Double = 3.0
-    @State private var protectivenessValue: Double = 5.0
-    @State private var trainabilityValue: Double = 4.0
+    @State private var barkingValue: Double = 4.0
+    @State private var energyValue: Double = 5.0
+    @State private var protectivenessValue: Double = 3.0
+    @State private var trainabilityValue: Double = 5.0
     
-    private let viewModel: SearchDogsViewModel
+    private let searchViewModel: SearchDogsViewModel = SearchDogsViewModel()
+    @ObservedObject var resultsViewModel = ResultsViewModel()
     @State private var noResultsFound: Bool = false
     
-    @State private var isShowingResultsPage = false
+    @State private var namesAndPics: [Any] = []
+    @State private var showResultsPage: Bool = false
     
     init() {
         UIScrollView.appearance().bounces = false
-        viewModel = SearchDogsViewModel()
     }
     
     var body: some View {
@@ -29,6 +30,9 @@ struct ContentView: View {
         } else {
             NavigationView {
                 VStack {
+                    NavigationLink(destination: ResultsView(resultsViewModel: resultsViewModel), isActive: self.$showResultsPage) {
+                        EmptyView()
+                    }.hidden()
                     // CABEÇALHO
                     VStack {
                         Text("Dog searcher")
@@ -53,19 +57,14 @@ struct ContentView: View {
                         }
                         .padding(.bottom, 10)
                         
-                        // BOTÃO
-                        VStack {
-                            NavigationLink(
-                                destination: ResultsView(),
-                                label: {
-                                    Text("Search")
-                                        .padding(.horizontal, 30.0)
-                                        .padding(.vertical, 20.0)
-                                        .background(Color.blue)
-                                        .foregroundColor(Color.white)
-                                        .cornerRadius(12.0)
-                                })
-                        }
+                        Button(action: searchAction, label: {
+                            Text("Search")
+                                .padding(.horizontal, 30.0)
+                                .padding(.vertical, 20.0)
+                                .background(Color.blue)
+                                .foregroundColor(Color.white)
+                                .cornerRadius(12.0)
+                        })
                         .padding(.bottom, 20.0)
                     }
                 }.navigationBarHidden(true)
@@ -107,13 +106,18 @@ struct ContentView: View {
     
     private func searchAction() {
         let searchParams = [barkingValue, energyValue, protectivenessValue, trainabilityValue]
-        viewModel.search(params: searchParams) { dogs in
+        searchViewModel.search(params: searchParams) { dogs in
             guard let dogs = dogs else { return }
             if dogs.isEmpty {
                 noResultsFound.toggle()
             } else {
-                let namesAndPics = viewModel.getNamesAndPictures(dogs)
-                isShowingResultsPage.toggle()
+                resultsViewModel.clearResults()
+                showResultsPage = true
+                let _ = searchViewModel.getNamesAndPictures(dogs) { names in
+                    DispatchQueue.main.async {
+                        resultsViewModel.results = names
+                    }
+                }
             }
         }
     }

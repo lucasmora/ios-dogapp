@@ -6,11 +6,19 @@
 //
 
 import Foundation
+import SwiftUI
 
-class ResultsViewModel {
-    private let searchViewModel: SearchDogsViewModel
+struct Result {
+    let name: String
+    let picture: UIImage
+}
+
+class ResultsViewModel: ObservableObject {
+    @Published var results = [(String, UIImage)]()
     
-    init() {
-        searchViewModel = SearchDogsViewModel()
+    func clearResults() {
+        DispatchQueue.main.async {
+            self.results = []
+        }
     }
 }
