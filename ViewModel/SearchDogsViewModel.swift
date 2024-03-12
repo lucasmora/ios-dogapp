@@ -20,7 +20,7 @@ class SearchDogsViewModel {
             var picture = UIImage(systemName: "heart.fill")
             
             var request = URLRequest(url: url)
-            request.setValue("1ErqLZKNVaGqp5RB3FDmDg==YvopevCM37CeLoLu", forHTTPHeaderField: "X-Api-Key")
+            request.setValue(KeyAuth.getAPIKey(), forHTTPHeaderField: "X-Api-Key")
             let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
                 guard let data = data else { return }
                 
