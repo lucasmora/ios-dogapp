@@ -68,7 +68,7 @@
 				A0AF32772AE88EC3004D6EFE /* Info.plist */,
 				A0AF32742AE88EC3004D6EFE /* Preview Content */,
 			);
-			path = DogApp;
+			name = DogApp;
 			sourceTree = "<group>";
 		};
 		A0AF32742AE88EC3004D6EFE /* Preview Content */ = {
@@ -308,9 +308,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"DogApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Preview Content\"";
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = DogApp/Info.plist;
+				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -329,9 +329,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"DogApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Preview Content\"";
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = DogApp/Info.plist;
+				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
